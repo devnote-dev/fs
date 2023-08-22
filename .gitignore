@@ -1,0 +1,16 @@
+# Binaries for programs and plugins
+/build
+/.vscode
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binaries and files
+/test
+*.cmd
+*.sh
+*.test
+
+# Other files/directories
