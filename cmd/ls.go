@@ -74,11 +74,22 @@ var lsCmd = &cobra.Command{
 
 		var res []entry
 		maxw := 0
+		maxt := 0
 
 		for _, e := range entries {
 			var fsize int64
 			if len(e.Name()) > maxw {
 				maxw = len(e.Name())
+			}
+
+			tname := "unknown"
+			i, err := e.Info()
+			if err == nil {
+				tname = getFileType(i, e.Type()&os.ModeSymlink != 0)
+			}
+
+			if len(tname) > maxt {
+				maxt = len(tname)
 			}
 
 			if size && !e.IsDir() {
@@ -88,15 +99,15 @@ var lsCmd = &cobra.Command{
 			}
 
 			if dirs && e.IsDir() {
-				res = append(res, entry{e.Name(), "dir", 0})
+				res = append(res, entry{e.Name(), tname, 0})
 			}
 
 			if files && e.Type().IsRegular() {
-				res = append(res, entry{e.Name(), "file", fsize})
+				res = append(res, entry{e.Name(), tname, fsize})
 			}
 
 			if links && e.Type()&os.ModeSymlink != 0 {
-				res = append(res, entry{e.Name(), "symlink", fsize})
+				res = append(res, entry{e.Name(), tname, fsize})
 			}
 		}
 
@@ -115,7 +126,7 @@ var lsCmd = &cobra.Command{
 			}
 
 			if size {
-				b.WriteString(strings.Repeat(" ", 10-len(e.tname)))
+				b.WriteString(strings.Repeat(" ", maxt+3-len(e.tname)))
 				b.WriteString(humanize.IBytes(uint64(e.size)))
 			}
 
