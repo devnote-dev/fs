@@ -1,6 +1,6 @@
 # Binaries for programs and plugins
-/build
-/.vscode
+build/
+.vscode/
 *.exe
 *.exe~
 *.dll
@@ -8,7 +8,7 @@
 *.dylib
 
 # Test binaries and files
-/test
+test/
 *.cmd
 *.sh
 *.test
