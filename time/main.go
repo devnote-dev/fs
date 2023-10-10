@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 )
 
@@ -25,5 +26,25 @@ func main() {
 	_ = cmd.Run()
 	tk := time.Now().Sub(st)
 
-	fmt.Printf("\n%s\n", tk)
+	var b strings.Builder
+	b.WriteRune('\n')
+
+	if hr := tk.Hours(); hr >= 1.0 {
+		fmt.Fprintf(&b, "%1fhrs ", hr)
+	}
+
+	if min := tk.Minutes(); min >= 1.0 && min < 60.0 {
+		fmt.Fprintf(&b, "%3.fmins ", min)
+	}
+
+	if sc := tk.Seconds(); sc >= 1.0 && sc < 60.0 {
+		fmt.Fprintf(&b, "%3.fsecs ", sc)
+	}
+
+	if ms := tk.Milliseconds(); ms >= 1 && ms < 1000 {
+		fmt.Fprintf(&b, "%dms ", ms)
+	}
+
+	b.WriteString("taken")
+	fmt.Println(b.String())
 }
